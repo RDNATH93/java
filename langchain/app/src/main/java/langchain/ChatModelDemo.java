@@ -3,20 +3,20 @@ package langchain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dev.langchain4j.data.message.ChatMessage;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.SystemMessage;
+import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 
 public class ChatModelDemo {
-  
-  private final static Logger logger = LoggerFactory.getLogger(ChatModelDemo.class);
+
+  private final static java.util.logging.Logger logger = LoggerFactory.getLogger(ChatModelDemo.class);
 
   static String MODEL_NAME = "gemma3:1b"; // try other local ollama model names
   static String BASE_URL = "http://localhost:11434"; // local ollama base url
-
-
 
   public static void main(String[] args) {
     OllamaChatModel chatModel = OllamaChatModel.builder()
@@ -25,17 +25,46 @@ public class ChatModelDemo {
         .logRequests(true)
         .build();
 
-      String aiMessage= chatModel.chat("Tell me top 10 cities in the world by population");
-      logger.info("AI Response: {}", aiMessage);
+    String aiMessage = chatModel.chat("Tell me top 10 cities in the world by population");
+    logger.info("AI Response: {}", aiMessage);
 
-     
-     ChatRequest chatRequest = ChatRequest.builder()
+    ChatRequest chatRequest = ChatRequest.builder()
         .messages(UserMessage.from("What is the capital of France?"))
         .build();
 
-      ChatResponse chatResponse = chatModel.chat(chatRequest);
+    ChatResponse chatResponse = chatModel.chat(chatRequest);
+    logger.info("Chat Response: {}", chatResponse);
 
-       logger.info("Chat Response: {}", chatResponse);
+    // Types of ChatMessage
+    UserMessage pritateJoke = UserMessage.from("Tell me a joke on pirates");
+    UserMessage coderJoke = UserMessage.from("Tell me a joke on programmer");
+    ChatResponse multipleChatResponse = chatModel.chat(pritateJoke, coderJoke);
+
+    logger.info("Multiple ChatResponse {}", multipleChatResponse);
+
+    SystemMessage.systemMessage(aiMessage);
+
+    // System message to instruct LLM to reply like Amitabh Bachchan
+    SystemMessage amitabhSystemMsg = SystemMessage.from("""
+        Reply in the style of Amitabh Bachchan, the legendary Bollywood actor.
+         Use his tone, mannerisms, and signature style in your responses.
+        """);
+    UserMessage userMsg = UserMessage.from("Tell me a joke on Bollywood");
+    ChatResponse amitabhResponse = chatModel.chat(amitabhSystemMsg, userMsg);
+    logger.info("Amitabh Style Response: {}", amitabhResponse);
+
+    // Multiple ChatMessages
+    UserMessage firstUserMessage = UserMessage.from("Hello, my name is Bond, James Bond.");
+    AiMessage firstAiMessage = chatModel.chat(firstUserMessage).aiMessage(); 
+    logger.info("firstAiMessage: {}", firstAiMessage);
+    UserMessage secondUserMessage = UserMessage.from("What is my name?");
+    AiMessage secondAiMessage = chatModel.chat(firstUserMessage, firstAiMessage, secondUserMessage).aiMessage(); // Klaus
+    logger.info("secondAiMessage: {}", secondAiMessage);
+
+    //Multimodality - Text Content
+    UserMessage userMessage = UserMessage.from(TextContent.from("Hello!"),TextContent.from("How are you?"));
+    ChatResponse textContentChatResponse= chatModel.chat(userMessage);
+    logger.info("Text Content Chat Response {}",textContentChatResponse);
 
   }
 
