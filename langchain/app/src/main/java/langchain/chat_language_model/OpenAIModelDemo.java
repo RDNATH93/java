@@ -34,7 +34,7 @@ public class OpenAIModelDemo {
 
                 OpenAiChatModel model = OpenAiChatModel.builder()
                                 .baseUrl("https://openrouter.ai/api/v1")
-                                .apiKey(API_KEY)
+                                .apiKey("API_KEY")
                                 .modelName("google/gemma-3-27b-it:free")
                                 .build();
 
