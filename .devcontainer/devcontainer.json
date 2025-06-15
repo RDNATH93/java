@@ -3,7 +3,7 @@
    "customizations": {
         "vscode": {
             "extensions": [
-                "oracle.oracle-java",
+                "vscjava.vscode-java-pack",
                 "vscjava.vscode-gradle"
             ]
         }

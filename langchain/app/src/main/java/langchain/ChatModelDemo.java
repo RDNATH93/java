@@ -13,7 +13,7 @@ import dev.langchain4j.model.ollama.OllamaChatModel;
 
 public class ChatModelDemo {
 
-  private final static java.util.logging.Logger logger = LoggerFactory.getLogger(ChatModelDemo.class);
+  private final static Logger logger = LoggerFactory.getLogger(ChatModelDemo.class);
 
   static String MODEL_NAME = "gemma3:1b"; // try other local ollama model names
   static String BASE_URL = "http://localhost:11434"; // local ollama base url
