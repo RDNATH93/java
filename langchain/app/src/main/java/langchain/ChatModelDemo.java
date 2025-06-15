@@ -1,5 +1,7 @@
 package langchain;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,8 @@ import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.request.ChatRequest;
+import dev.langchain4j.model.chat.request.ResponseFormat;
+import dev.langchain4j.model.chat.request.ResponseFormatType;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 
@@ -25,46 +29,71 @@ public class ChatModelDemo {
         .logRequests(true)
         .build();
 
-    String aiMessage = chatModel.chat("Tell me top 10 cities in the world by population");
-    logger.info("AI Response: {}", aiMessage);
+    // *****************Multiple ways to form ChatMessage*****************
+
+    // String aiMessage = chatModel.chat("Tell me top 10 cities in the world by population");
+    // logger.info("AI Response: {}", aiMessage);
+
+    // UserMessage message = new UserMessage("Tell me top 10 cities in the world by population");
+    // ChatResponse response = chatModel.chat(message);
+    // logger.info("Response: {}", response);
+
+    // UserMessage message = UserMessage.from("population", "Tell me top 10 cities in the world by population");
+    // ChatResponse response = chatModel.chat(message);
+    // logger.info("Response: {}", response);
+
+    // UserMessage childMessage = UserMessage.builder().name("Human Body")
+    //.addContent( TextContent.from("How many bones does a child body has")).build();
+    // UserMessage adultMessage= UserMessage.userMessage(TextContent.from("How many bones does an adult human body has"));
+
+    // ChatResponse response = chatModel.chat(List.of(childMessage,adultMessage));
+    // logger.info("Response: {}", response);
 
     ChatRequest chatRequest = ChatRequest.builder()
-        .messages(UserMessage.from("What is the capital of France?"))
-        .build();
+    .messages(UserMessage.from("capital of NewZeeland"))
+    .temperature(0.1)
+    .topP(0.8)
+    .maxOutputTokens(10)
+    .responseFormat(ResponseFormat.TEXT)
+    .build();
 
     ChatResponse chatResponse = chatModel.chat(chatRequest);
     logger.info("Chat Response: {}", chatResponse);
 
-    // Types of ChatMessage
-    UserMessage pritateJoke = UserMessage.from("Tell me a joke on pirates");
-    UserMessage coderJoke = UserMessage.from("Tell me a joke on programmer");
-    ChatResponse multipleChatResponse = chatModel.chat(pritateJoke, coderJoke);
+    // // Types of ChatMessage
+    // UserMessage pritateJoke = UserMessage.from("Tell me a joke on pirates");
+    // UserMessage coderJoke = UserMessage.from("Tell me a joke on programmer");
+    // ChatResponse multipleChatResponse = chatModel.chat(pritateJoke, coderJoke);
 
-    logger.info("Multiple ChatResponse {}", multipleChatResponse);
+    // logger.info("Multiple ChatResponse {}", multipleChatResponse);
 
-    SystemMessage.systemMessage(aiMessage);
+    // SystemMessage.systemMessage(aiMessage);
 
-    // System message to instruct LLM to reply like Amitabh Bachchan
-    SystemMessage amitabhSystemMsg = SystemMessage.from("""
-        Reply in the style of Amitabh Bachchan, the legendary Bollywood actor.
-         Use his tone, mannerisms, and signature style in your responses.
-        """);
-    UserMessage userMsg = UserMessage.from("Tell me a joke on Bollywood");
-    ChatResponse amitabhResponse = chatModel.chat(amitabhSystemMsg, userMsg);
-    logger.info("Amitabh Style Response: {}", amitabhResponse);
+    // // System message to instruct LLM to reply like Amitabh Bachchan
+    // SystemMessage amitabhSystemMsg = SystemMessage.from("""
+    // Reply in the style of Amitabh Bachchan, the legendary Bollywood actor.
+    // Use his tone, mannerisms, and signature style in your responses.
+    // """);
+    // UserMessage userMsg = UserMessage.from("Tell me a joke on Bollywood");
+    // ChatResponse amitabhResponse = chatModel.chat(amitabhSystemMsg, userMsg);
+    // logger.info("Amitabh Style Response: {}", amitabhResponse);
 
-    // Multiple ChatMessages
-    UserMessage firstUserMessage = UserMessage.from("Hello, my name is Bond, James Bond.");
-    AiMessage firstAiMessage = chatModel.chat(firstUserMessage).aiMessage(); 
-    logger.info("firstAiMessage: {}", firstAiMessage);
-    UserMessage secondUserMessage = UserMessage.from("What is my name?");
-    AiMessage secondAiMessage = chatModel.chat(firstUserMessage, firstAiMessage, secondUserMessage).aiMessage(); // Klaus
-    logger.info("secondAiMessage: {}", secondAiMessage);
+    // // Multiple ChatMessages
+    // UserMessage firstUserMessage = UserMessage.from("Hello, my name is Bond,
+    // James Bond.");
+    // AiMessage firstAiMessage = chatModel.chat(firstUserMessage).aiMessage();
+    // logger.info("firstAiMessage: {}", firstAiMessage);
+    // UserMessage secondUserMessage = UserMessage.from("What is my name?");
+    // AiMessage secondAiMessage = chatModel.chat(firstUserMessage, firstAiMessage,
+    // secondUserMessage).aiMessage(); // Klaus
+    // logger.info("secondAiMessage: {}", secondAiMessage);
 
-    //Multimodality - Text Content
-    UserMessage userMessage = UserMessage.from(TextContent.from("Hello!"),TextContent.from("How are you?"));
-    ChatResponse textContentChatResponse= chatModel.chat(userMessage);
-    logger.info("Text Content Chat Response {}",textContentChatResponse);
+    // //Multimodality - Text Content
+    // UserMessage userMessage =
+    // UserMessage.from(TextContent.from("Hello!"),TextContent.from("How are
+    // you?"));
+    // ChatResponse textContentChatResponse= chatModel.chat(userMessage);
+    // logger.info("Text Content Chat Response {}",textContentChatResponse);
 
   }
 
