@@ -1,4 +1,11 @@
 {
   "image": "mcr.microsoft.com/devcontainers/java:21",
-  "features": {}
+   "customizations": {
+        "vscode": {
+            "extensions": [
+                "oracle.oracle-java",
+                "vscjava.vscode-gradle"
+            ]
+        }
+    }
 }
