@@ -1,4 +1,4 @@
-package langchain;
+package langchain.chat_language_model;
 
 import java.util.List;
 
