@@ -1,0 +1,10 @@
+{
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "oracle.oracle-java",
+                "vscjava.vscode-gradle"
+            ]
+        }
+    }
+}
