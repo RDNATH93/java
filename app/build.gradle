@@ -7,6 +7,7 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id 'java'
     id 'application'
 }
 
@@ -15,9 +16,20 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'org.apache.httpcomponents.client5:httpclient5:5.5'
+    }
+}
+
 dependencies {
     implementation 'com.google.adk:google-adk:0.1.0'
     implementation 'com.google.adk:google-adk-dev:0.1.0'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.5'
+     implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.apache.httpcomponents.client5', module: 'httpclient5'
+    }
+    
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
 
@@ -36,7 +48,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'jagent.App'
+    mainClass = 'com.google.adk.web.AdkWebServer'
 }
 
 tasks.named('test') {
