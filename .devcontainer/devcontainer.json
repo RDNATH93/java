@@ -1,11 +1,18 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/java:21",
-   "customizations": {
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+            "ghcr.io/devcontainers/features/java:1": {
+            "version": "21",
+            "jdkDistro": "oracle",
+            "installGradle": "true"  
+        }
+  },
+  "customizations": {
         "vscode": {
+            "settings": {},
             "extensions": [
-                "vscjava.vscode-java-pack",
-                "vscjava.vscode-gradle"
+                "vscjava.vscode-java-pack"
             ]
         }
-    }
+   }
 }
