@@ -11,7 +11,10 @@
         "vscode": {
             "settings": {},
             "extensions": [
-                "vscjava.vscode-java-pack"
+                "vscjava.vscode-java-pack",
+                "ms-azuretools.vscode-containers",
+                "cweijan.vscode-database-client2",
+                "cweijan.dbclient-jdbc"
             ]
         }
    }
