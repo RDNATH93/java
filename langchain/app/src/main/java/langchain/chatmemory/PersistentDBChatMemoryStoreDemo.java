@@ -25,7 +25,7 @@ import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 
 public class PersistentDBChatMemoryStoreDemo {
 
-    private static final Logger logger = LoggerFactory.getLogger(PersistentMySQLChatMemoryStoreDemo.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersistentDBChatMemoryStoreDemo.class);
 
     public static void main(String[] args) {
         OpenAiChatModel model = OpenAiChatModel.builder()
@@ -40,8 +40,14 @@ public class PersistentDBChatMemoryStoreDemo {
                 .chatMemoryStore(new PostgresChatMemoryStore())
                 .build();
 
+        // chatMemory.add(UserMessage.from("My name is Bond, James Bond"));
+        // ChatResponse response = model.chat(chatMemory.messages());
+        // String aiMessage = response.aiMessage().text();
+        // logger.info("AiMessage: {}",aiMessage);
+        // chatMemory.add(AiMessage.from(aiMessage));
+
         chatMemory.add(UserMessage.from("What is my name"));
-        ChatResponse response = model.chat(chatMemory.messages());  
+        ChatResponse response = model.chat(chatMemory.messages());
         String aiMessage = response.aiMessage().text();
         logger.info("AiMessage: {}", aiMessage);
         chatMemory.add(AiMessage.from(aiMessage));
@@ -57,21 +63,21 @@ public class PersistentDBChatMemoryStoreDemo {
             config.setUsername("postgres");
             config.setPassword("postgres");
             config.setMaximumPoolSize(10);
-            
+
             this.dataSource = new HikariDataSource(config);
             initializeTable();
         }
 
         private void initializeTable() {
             String sql = """
-                CREATE TABLE IF NOT EXISTS chat_messages (
-                    memory_id VARCHAR(255) PRIMARY KEY,
-                    messages TEXT NOT NULL
-                )
-            """;
-            
+                        CREATE TABLE IF NOT EXISTS chat_messages (
+                            memory_id VARCHAR(255) PRIMARY KEY,
+                            messages TEXT NOT NULL
+                        )
+                    """;
+
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.execute();
             } catch (SQLException e) {
                 logger.error("Error initializing table", e);
@@ -82,11 +88,11 @@ public class PersistentDBChatMemoryStoreDemo {
         @Override
         public List<ChatMessage> getMessages(Object memoryId) {
             String sql = "SELECT messages FROM chat_messages WHERE memory_id = ?";
-            
+
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, (String) memoryId);
-                
+
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
                         String json = rs.getString("messages");
@@ -104,16 +110,16 @@ public class PersistentDBChatMemoryStoreDemo {
         @Override
         public void updateMessages(Object memoryId, List<ChatMessage> messages) {
             String sql = """
-                INSERT INTO chat_messages (memory_id, messages)
-                VALUES (?, ?)
-                ON CONFLICT (memory_id)
-                DO UPDATE SET messages = EXCLUDED.messages
-            """;
+                        INSERT INTO chat_messages (memory_id, messages)
+                        VALUES (?, ?)
+                        ON CONFLICT (memory_id)
+                        DO UPDATE SET messages = EXCLUDED.messages
+                    """;
 
             String json = messagesToJson(messages);
-            
+
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, (String) memoryId);
                 stmt.setString(2, json);
                 stmt.executeUpdate();
@@ -127,9 +133,9 @@ public class PersistentDBChatMemoryStoreDemo {
         @Override
         public void deleteMessages(Object memoryId) {
             String sql = "DELETE FROM chat_messages WHERE memory_id = ?";
-            
+
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, (String) memoryId);
                 stmt.executeUpdate();
                 logger.info("Deleted messages for memoryId: {}", memoryId);
