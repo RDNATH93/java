@@ -25,6 +25,7 @@ dependencies {
     implementation 'dev.langchain4j:langchain4j-mcp:1.1.0-beta7'
     implementation 'dev.langchain4j:langchain4j-easy-rag:1.1.0-beta7'
     implementation 'dev.langchain4j:langchain4j-embeddings-bge-small-en-v15-q:1.1.0-beta7'
+    implementation 'dev.langchain4j:langchain4j-pgvector:1.1.0-beta7'
     
     implementation 'org.postgresql:postgresql:42.7.7'
     implementation 'com.zaxxer:HikariCP:6.3.0'

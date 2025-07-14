@@ -1,4 +1,4 @@
-package langchain.rag.easy.shared;
+package langchain.rag.shared;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

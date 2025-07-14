@@ -1,4 +1,4 @@
-package langchain.rag.easy.shared;
+package langchain.rag.shared;
 
 /**
  * This is an "AI Service". It is a Java service with AI capabilities/features.

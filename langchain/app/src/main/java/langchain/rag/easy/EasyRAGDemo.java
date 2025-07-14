@@ -1,5 +1,7 @@
 package langchain.rag.easy;
 
+import static langchain.rag.shared.Utils.*;
+
 import java.nio.file.FileSystems;
 import java.nio.file.PathMatcher;
 import java.util.List;
@@ -16,9 +18,7 @@ import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
-import langchain.rag.easy.shared.Assistant;
-
-import static langchain.rag.easy.shared.Utils.*;
+import langchain.rag.shared.Assistant;
 
 /**
  * This example demonstrates how to implement an "Easy RAG" (Retrieval-Augmented
