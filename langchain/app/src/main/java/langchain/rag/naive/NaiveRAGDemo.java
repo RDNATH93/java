@@ -48,8 +48,8 @@ public class NaiveRAGDemo {
     public static void main(String[] args) {
 
         // Let's create an assistant that will know about our document
-        Assistant assistant = createAssistant("documents/miles-of-smiles-terms-of-use.txt");
-
+       // Assistant assistant = createAssistant("documents/miles-of-smiles-terms-of-use.txt");
+        Assistant assistant = createAssistant("documents/biography-of-john-doe.txt");
         
         // Now, let's start the conversation with the assistant. We can ask questions like:
         // - Can I cancel my reservation?
