@@ -25,7 +25,30 @@ import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.IngestionResult;
 import dev.langchain4j.store.embedding.inmemory.InMemoryEmbeddingStore;
 import langchain.rag.shared.AdvancedAssistant;
-import langchain.rag.shared.Assistant;
+
+/**
+     * Please refer to {@link Naive_RAG_Example} for a basic context.
+     * <p>
+     * Advanced RAG in LangChain4j is described here: https://github.com/langchain4j/langchain4j/pull/538
+     * <p>
+     * This example illustrates the implementation of a more sophisticated RAG application
+     * using a technique known as "query compression".
+     * Often, a query from a user is a follow-up question that refers back to earlier parts of the conversation
+     * and lacks all the necessary details for effective retrieval.
+     * For example, consider this conversation:
+     * User: What is the legacy of John Doe?
+     * AI: John Doe was a...
+     * User: When was he born?
+     * <p>
+     * In such scenarios, using a basic RAG approach with a query like "When was he born?"
+     * would likely fail to find articles about John Doe, as it doesn't contain "John Doe" in the query.
+     * Query compression involves taking the user's query and the preceding conversation, then asking the LLM
+     * to "compress" this into a single, self-contained query.
+     * The LLM should generate a query like "When was John Doe born?".
+     * This method adds a bit of latency and cost but significantly enhances the quality of the RAG process.
+     * It's worth noting that the LLM used for compression doesn't have to be the same as the one
+     * used for conversation. For instance, you might use a smaller local model trained for summarization.
+     */
 
 public class AdvancedRAGWithQueryCompressionDemo {
     private static final String GOOGLE_OPENAI_URL = "https://generativelanguage.googleapis.com/v1beta/openai";
@@ -35,6 +58,11 @@ public class AdvancedRAGWithQueryCompressionDemo {
 
         AdvancedAssistant assistant = createAssistant("documents/biography-of-john-doe.txt");
 
+        // First, ask "What is the legacy of John Doe?"
+        // Then, ask "When was he born?"
+        // Now, review the logs:
+        // The first query was not compressed as there was no preceding context to compress.
+        // The second query, however, was compressed into something like "When was John Doe born?"
         startConversationWith(assistant);
 
     }
@@ -71,6 +99,9 @@ public class AdvancedRAGWithQueryCompressionDemo {
 
         IngestionResult result = ingestor.ingest(document);
 
+        // We will create a CompressingQueryTransformer, which is responsible for compressing
+        // the user's query and the preceding conversation into a single, stand-alone query.
+        // This should significantly improve the quality of the retrieval process.
         QueryTransformer compressingQueryTransformer = CompressingQueryTransformer.builder()
         .chatModel(queryCompessionModel)
         .build();
@@ -84,6 +115,10 @@ public class AdvancedRAGWithQueryCompressionDemo {
         .minScore(0.5)
         .build();
 
+
+        // The RetrievalAugmentor serves as the entry point into the RAG flow in LangChain4j.
+        // It can be configured to customize the RAG behavior according to your requirements.
+        // In subsequent examples, we will explore more customizations.
         RetrievalAugmentor augmentor = DefaultRetrievalAugmentor.builder()
         .queryTransformer(loggingQueryTransformer)
         .contentRetriever(embeddingStoreContentRetriever)
