@@ -27,6 +27,9 @@ dependencies {
     implementation 'dev.langchain4j:langchain4j-embeddings-bge-small-en-v15-q:1.1.0-beta7'
     implementation 'dev.langchain4j:langchain4j-pgvector:1.1.0-beta7'
 
+    implementation 'dev.langchain4j:langchain4j-experimental-sql:1.1.0-beta7'
+    implementation 'dev.langchain4j:langchain4j-embedding-store-filter-parser-sql:1.1.0-beta7'
+
     //to re-rank content 
     implementation 'dev.langchain4j:langchain4j-cohere:1.1.0-beta7'
 
@@ -38,6 +41,8 @@ dependencies {
    
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
+
+    testImplementation 'org.assertj:assertj-core:3.27.3'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
