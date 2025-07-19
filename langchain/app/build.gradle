@@ -30,6 +30,8 @@ dependencies {
     implementation 'dev.langchain4j:langchain4j-experimental-sql:1.1.0-beta7'
     implementation 'dev.langchain4j:langchain4j-embedding-store-filter-parser-sql:1.1.0-beta7'
 
+    implementation 'dev.langchain4j:langchain4j-web-search-engine-tavily:1.1.0-beta7'
+
     //to re-rank content 
     implementation 'dev.langchain4j:langchain4j-cohere:1.1.0-beta7'
 
