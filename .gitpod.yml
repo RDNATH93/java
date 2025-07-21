@@ -1,0 +1,11 @@
+image:
+  file: .devcontainer/Dockerfile
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
+    - vmware.vscode-boot-dev-pack
+    - ms-azuretools.vscode-containers
+    - cweijan.vscode-database-client2
+    - cweijan.dbclient-jdbc
+    - alphabotsec.vscode-eclipse-keybindings
