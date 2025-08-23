@@ -1,0 +1,20 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+            "ghcr.io/devcontainers/features/java:1": {
+            "version": "21",
+            "jdkDistro": "oracle",
+            "installGradle": "true"  
+        }
+  },
+  "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "alphabotsec.vscode-eclipse-keybindings"
+            ]
+        }
+   },
+   "postCreateCommand": "sdk default java 21.0.7-oracle"
+}
