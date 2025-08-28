@@ -6,17 +6,29 @@ import java.util.List;
 public class DBConnectionManager {
     private List<DBConnection> freeConnectionPool = new ArrayList<>();
     private List<DBConnection> inUseConnectionPool = new ArrayList<>();
+    private static DBConnectionManager dbConnectionManager = null;
 
     private static final int INITIAL_POOL_SIZE = 3;
     private static final int MAX_POOL_SIZE = 6;
 
-    DBConnectionManager() {
+    private DBConnectionManager() {
         for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
             freeConnectionPool.add(new DBConnection());
         }
     }
 
-    public DBConnection getDbConnection() {
+    public static DBConnectionManager getInstance() {
+        if (dbConnectionManager == null) {
+            synchronized (DBConnection.class) {
+                if (dbConnectionManager == null) {
+                    dbConnectionManager = new DBConnectionManager();
+                }
+            }
+        }
+        return dbConnectionManager;
+    }
+
+    public synchronized DBConnection getDbConnection() {
         if (freeConnectionPool.isEmpty() && inUseConnectionPool.size() < MAX_POOL_SIZE) {
             freeConnectionPool.add(new DBConnection());
             System.out.println("Creating new connection and putting into free pool, size "
@@ -31,7 +43,7 @@ public class DBConnectionManager {
         return connection;
     }
 
-    public void releaseConnection(DBConnection dbConnection) {
+    public synchronized void releaseConnection(DBConnection dbConnection) {
         inUseConnectionPool.remove(dbConnection);
         System.out.println("Romoving connection from use pool, size " + inUseConnectionPool.size());
         freeConnectionPool.add(dbConnection);
