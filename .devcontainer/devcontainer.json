@@ -1,8 +1,8 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "mcr.microsoft.com/devcontainers/universal:4",
   "features": {
             "ghcr.io/devcontainers/features/java:1": {
-            "version": "21",
+            "version": "25",
             "jdkDistro": "oracle",
             "installGradle": "true"  
         }
