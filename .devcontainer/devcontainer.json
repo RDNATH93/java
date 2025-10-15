@@ -20,6 +20,6 @@
             ]
         }
    },
-   "postCreateCommand": "sdk default java 21.0.7-oracle"
+   "postCreateCommand": "sdk default java 25-oracle"
 
 }
