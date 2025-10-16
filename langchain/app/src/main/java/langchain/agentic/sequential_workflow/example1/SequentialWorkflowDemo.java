@@ -4,8 +4,6 @@ import java.util.Map;
 
 import dev.langchain4j.agentic.AgenticServices;
 import dev.langchain4j.agentic.UntypedAgent;
-import dev.langchain4j.agentic.scope.AgenticScope;
-import dev.langchain4j.agentic.scope.AgenticScopeAccess;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 
 public class SequentialWorkflowDemo {
@@ -40,17 +38,25 @@ public class SequentialWorkflowDemo {
                 .outputName("story").build();
 
         // agent orchestrator
-        UntypedAgent novelAgent = AgenticServices.sequenceBuilder()
+        // UntypedAgent novelAgent = AgenticServices.sequenceBuilder()
+        //         .subAgents(creativeWriter, audienceEditor, styleEditor)
+        //         .outputName("story")
+        //         .build();
+
+        // Map<String, Object> input = Map.of(
+        //         "topic", "dragons and wizards",
+        //         "style", "fantasy",
+        //         "audience", "young adults");
+
+        //String story = (String) novelAgent.invoke(input);
+
+        NovelAgent novelAgent = AgenticServices
+                .sequenceBuilder(NovelAgent.class)
                 .subAgents(creativeWriter, audienceEditor, styleEditor)
                 .outputName("story")
                 .build();
 
-        Map<String, Object> input = Map.of(
-                "topic", "dragons and wizards",
-                "style", "fantasy",
-                "audience", "young adults");
-
-        String story = (String) novelAgent.invoke(input);
+        String story = novelAgent.createNovel("dragons and wizards","young adults","fantasy");
         
         IO.println("*********************STORY*********************");
         IO.println(story);
