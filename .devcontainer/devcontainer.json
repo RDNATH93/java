@@ -2,17 +2,8 @@
   "name": "Generative AI Java Development Environment",
   "image": "mcr.microsoft.com/devcontainers/universal:4",
   "features": {
-    "ghcr.io/devcontainers/features/java:1": {
-            "version": "25",
-            "jdkDistro": "oracle",
-            "installGradle": "true"  
-    },
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": false,
-      "upgradePackages": false
-    },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "sshd": "latest"
+    "ghcr.io/devcontainers/features/sshd:1": {}
   },
   "customizations": {
     "vscode": {
@@ -27,16 +18,9 @@
         "java.compile.nullAnalysis.mode": "automatic",
         "java.completion.enabled": true,
         "java.format.enabled": true,
-        "java.saveActions.organizeImports": true,
-        "spring-boot.ls.java.home": "/usr/lib/jvm/oracle-jdk-25"
+        "java.saveActions.organizeImports": true
       }
     }
   },
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y maven",
-  "remoteUser": "vscode",
-  "containerEnv": {
-    "JAVA_HOME": "/usr/lib/jvm/oracle-jdk-25",
-    "MAVEN_OPTS": "-Xmx2g"
-  },
-  "forwardPorts": [8080]
+  "postCreateCommand": "bash -c 'source $HOME/.sdkman/bin/sdkman-init.sh && sdk install java 25-open && sdk default java 25-open && java -version'"
 }
